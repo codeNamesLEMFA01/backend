@@ -1,0 +1,10 @@
+.DS_Store
+
+.idea
+.env
+*/.env
+.venv
+.venv/**/*
+
+__pycache__
+*/__pycache__
