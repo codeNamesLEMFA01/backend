@@ -3,9 +3,16 @@ from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from .routers.names import router as names_router
-# from .routers.posts import router as posts_router
+import argparse
+from mongoengine import connect
+from .database import get_db
+from .extract.all_names import run_yob_import
 
+# parser = argparse.ArgumentParser()
+# parser.add_argument("--seed", action="store_true",default=False ,help="Enable debug mode")
+# args = parser.parse_args()
 
+db = get_db()
 app = FastAPI()
 
 origins = [
@@ -21,7 +28,7 @@ app.add_middleware(
   allow_headers=["*"],
 )
 
-# models.Base.metadata.create_all(bind=engine)
+
 
 @app.get("/")
 def read_root():
@@ -33,4 +40,8 @@ app.include_router(names_router)
 if __name__ == '__main__':
     uvicorn.run("main:app", reload=True)
 
+
+# run_yob_import(db)
 print("🧨 HELL 🤘")
+
+from fastapi import Depends

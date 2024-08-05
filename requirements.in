@@ -2,5 +2,5 @@ fastapi==0.111.0
 pandas==2.2.2
 uvicorn==0.30.1
 python-dotenv==1.0.1
-motor==3.3
 pydantic[email]
+mongoengine==0.27.0

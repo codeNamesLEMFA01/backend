@@ -1,27 +1,21 @@
 import os
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from mongoengine import connect
 
 load_dotenv()
-POSTGRES_USER = os.environ.get("POSTGRES_USER")
-POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")
-POSTGRES_HOST = os.environ.get("POSTGRES_HOST")
-POSTGRES_DB = os.environ.get("POSTGRES_DB")
-POSTGRES_PORT = os.environ.get("POSTGRES_PORT")
 
-DATABASE_URL=f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
+MONGO_ROOT_USER = os.environ.get("MONGO_ROOT_USER")
+MONGO_ROOT_PASSWORD = os.environ.get("MONGO_ROOT_PASSWORD")
+MONGO_DATABASE_NAME = os.environ.get("MONGO_DATABASE_NAME")
+MONGO_HOST = os.environ.get("MONGO_HOST", "localhost")
+MONGO_PORT = os.environ.get("MONGO_PORT", "27017")
 
-engine = create_engine(DATABASE_URL)
+# Construire l'URL de connexion MongoDB
+MONGO_URL = f"mongodb://{MONGO_ROOT_USER}:{MONGO_ROOT_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DATABASE_NAME}?authSource=admin"
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+# Établir la connexion à MongoDB avec MongoEngine
+print(MONGO_URL)
+connect(host=MONGO_URL)
 
 def get_db():
-  db = SessionLocal()
-  try:
-    yield db
-  finally:
-    db.close()
+    return connect(host=MONGO_URL)

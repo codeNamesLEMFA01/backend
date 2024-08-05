@@ -9,6 +9,8 @@ services:
         condition: service_healthy
     ports:
       - "8000:8000"
+    networks:
+      - code-name
     volumes:
       - .:/home/project:ro
     env_file:
@@ -23,6 +25,7 @@ services:
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
       - MONGO_INITDB_DATABASE=${MONGO_DATABASE_NAME}
+    command: mongod --logpath /data/db/mongo.log.txt --logappend
     volumes:
       - data:/data/db
     networks:
@@ -40,9 +43,9 @@ services:
     ports:
       - "8080:8081"
     environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+      - ME_CONFIG_MONGODB_SERVER=${MONGO_HOST}
+      - ME_CONFIG_MONGODB_PORT=${MONGO_PORT}
+      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       - ME_CONFIG_MONGODB_ADMINUSERNAME=${MONGO_ROOT_USER}
       - ME_CONFIG_MONGODB_ADMINPASSWORD=${MONGO_ROOT_PASSWORD}
       - ME_CONFIG_BASICAUTH_USERNAME=${MONGO_EXPRESS_LOGIN}
