@@ -3,6 +3,7 @@ from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 from .routers.names import router as names_router
+from .routers.auth import router as auth_router
 # from .routers.posts import router as posts_router
 
 
@@ -28,6 +29,7 @@ def read_root():
   return Response("Server is running.")
 
 app.include_router(names_router)
+app.include_router(auth_router)
 # app.include_router(posts_router)
 
 if __name__ == '__main__':
