@@ -1,6 +1,6 @@
 from zipfile import ZipFile
 import pandas as pd
-from mongoengine import connect
+from mongoengine import DoesNotExist
 from ..models.yob import Yob
 
 zip_path = "./data/names.zip"
@@ -26,13 +26,21 @@ def insert_yob_data(mongo_client):
 
     with mongo_client.start_session() as session:
         for _, row in names.iterrows():
-            yob = Yob(
-                name=row['name'],
-                sex=row['sex'],
-                birth=row['birth'],
-                year=row['year']
-            )
-            yob.save(session=session)
+            try:
+                yob = Yob.objects.get(
+                    name=row['name'],
+                    sex=row['sex'],
+                    birth=row['birth'],
+                    year=row['year']
+                    )
+            except DoesNotExist:
+                yob = Yob(
+                    name=row['name'],
+                    sex=row['sex'],
+                    birth=row['birth'],
+                    year=row['year']
+                    )
+                yob.save(session=session)
 
     print("Données insérées avec succès dans MongoDB.")
 

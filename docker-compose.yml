@@ -30,6 +30,7 @@ services:
       - data:/data/db
     networks:
       - code-name
+    restart: on-failure
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongosh --quiet
       interval: 10s

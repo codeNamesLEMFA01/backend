@@ -1,6 +1,8 @@
 import json
 from mongoengine import Q
-from ..models.yob import Yob  # Assurez-vous que le chemin d'importation est correct
+from ..models.yob import Yob
+from ..models.yobBySex import Yob
+
 
 
 def namesByYear(year):
@@ -29,12 +31,42 @@ def get_sum_by_year_and_sex(year):
 
 
 def get_total_by_sex():
-    pipeline = [
+    pipeline =[
+        {'$match': {'sex': {'$in': ['M', 'F']}}},
         {'$group': {
             '_id': {'year': '$year', 'sex': '$sex'},
             'total': {'$sum': '$birth'}
-            }},
-        {'$sort': {'_id.year': 1, '_id.sex': 1}}
+            }
+            },
+        {'$group': {
+            '_id': '$_id.year',
+            'M': {'$sum': {'$cond': [{'$eq': ['$_id.sex', 'M']}, '$total', 0]}},
+            'F': {'$sum': {'$cond': [{'$eq': ['$_id.sex', 'F']}, '$total', 0]}},
+            'total': {'$sum': '$total'}
+            }
+            },
+        {'$project': {
+            '_id': 0,
+            'data': {
+                '$arrayToObject': [[
+                    {'k': {'$toString': '$_id'},
+                     'v': {
+                         'M': '$M',
+                         'F': '$F',
+                         'total': '$total'
+                         }
+                     }
+                    ]]
+                }
+            }
+            },
+        {'$group': {
+            '_id': null,
+            'data': {'$mergeObjects': '$data'}
+            }
+            },
+        {'$project': {'_id': 0, 'data': 1}},
+        {'$out': 'yobsBySex'}
         ]
     data = list(Yob.objects.aggregate(pipeline))
 
@@ -65,8 +97,9 @@ def get_total_by_sex():
     return result
 
 
-# Si vous avez besoin de calculer total_birth_by_year_and_sex pour d'autres fonctions
 def calculate_total_birth_by_year_and_sex():
+
+
     pipeline = [
         {'$group': {
             '_id': {'year': '$year', 'sex': '$sex'},

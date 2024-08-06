@@ -14,8 +14,4 @@ MONGO_PORT = os.environ.get("MONGO_PORT", "27017")
 MONGO_URL = f"mongodb://{MONGO_ROOT_USER}:{MONGO_ROOT_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DATABASE_NAME}?authSource=admin"
 
 # Établir la connexion à MongoDB avec MongoEngine
-print(MONGO_URL)
-connect(host=MONGO_URL)
-
-def get_db():
-    return connect(host=MONGO_URL)
+db = connect(host=MONGO_URL)
