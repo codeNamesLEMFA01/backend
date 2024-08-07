@@ -1,0 +1,1 @@
+cronSeedDb = "0 14 * * *"
