@@ -35,12 +35,16 @@ Ce projet utilise Docker Compose pour mettre en place un environnement de dével
 
 Les variables d'environnement sont utilisées pour la configuration et doivent être définies dans un fichier `.env` :
 
-- `MONGO_ROOT_USER` : Nom d'utilisateur root MongoDB
-- `MONGO_ROOT_PASSWORD` : Mot de passe root MongoDB
-- `MONGO_DATABASE_NAME` : Nom de la base de données MongoDB
-- `MONGO_EXPRESS_LOGIN` : Nom d'utilisateur pour Mongo Express
-- `MONGO_EXPRESS_PASSWORD` : Mot de passe pour Mongo Express
-
+| Variable d'environnement | Description |
+|--------------------------|-------------|
+| `MONGO_ROOT_USER` | Nom d'utilisateur root MongoDB |
+| `MONGO_ROOT_PASSWORD` | Mot de passe root MongoDB |
+| `MONGO_DATABASE_NAME` | Nom de la base de données MongoDB |
+| `MONGO_EXPRESS_LOGIN` | Nom d'utilisateur pour Mongo Express |
+| `MONGO_EXPRESS_PASSWORD` | Mot de passe pour Mongo Express |
+| `MONGO_HOST` | Hôte de la base de données MongoDB |
+| `MONGO_PORT` | Port de la base de données MongoDB |
+| `SEEDER` | Active ou désactive l'insertion des données dans la base de données au lancement du serveur |
 ## Utilisation
 
 1. Créez un fichier `.env` avec les variables d'environnement requises.
