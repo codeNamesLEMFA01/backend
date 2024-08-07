@@ -6,4 +6,10 @@ class Yob(Document):
     birth = IntField(required=True)
     year = IntField(required=True)
 
-    meta = {'collection': 'yobs'}
+
+    meta = {
+        'collection': 'yobs',
+        'indexes': [
+            {'fields': ['name', 'sex', 'year'], 'unique': True}
+        ]
+    }

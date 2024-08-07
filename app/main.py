@@ -4,8 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from .routers.names import router as names_router
 from .cron.seedDb import router as seed_router
+from .cron.yobsBySex import router as yopByYear
 import argparse
 from mongoengine import connect
+
 
 app = FastAPI()
 
@@ -29,6 +31,8 @@ def read_root():
 # Inclure le routeur
 app.include_router(names_router)
 app.include_router(seed_router)
+app.include_router(yopByYear)
+
 
 def main() -> None:
     uvicorn.run("main:app", reload=True)

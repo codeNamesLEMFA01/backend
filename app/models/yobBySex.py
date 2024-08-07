@@ -1,12 +1,16 @@
-from mongoengine import Document, EmbeddedDocument, EmbeddedDocumentField, StringField, IntField, DictField
-
-# Define the embedded document
-class GenderCount(EmbeddedDocument):
-    F = IntField(required=True)
-    M = IntField(required=True)
-    total = IntField(required=True)
+from mongoengine import Document, StringField, IntField
 
 class YobsBySex(Document):
-    year = StringField(required=True, unique=True)
-    data = DictField(EmbeddedDocumentField(GenderCount))
+    M = IntField(required=True)
+    F = IntField(required=True)
+    total = IntField(required=True)
+    year = IntField(required=True)
     meta = {'collection': 'yobsBySex'}
+
+    def to_dict(self):
+        return {
+            'M': self.M,
+            'F': self.F,
+            'total': self.total,
+            'year': self.year
+            }
