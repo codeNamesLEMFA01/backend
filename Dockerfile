@@ -7,14 +7,18 @@ ENV PYTHONUNBUFFERED=1
 
 # Update apt-get
 RUN apt-get update;\
-    apt-get install vim -y;
+    apt-get install vim -y;\
+    apt-get install pip -y;
 
 # Set work directory
 RUN mkdir /home/project
 WORKDIR /home/project
 
 # Install dependencies
-COPY requirements.txt /home/project/
+COPY requirements.in /home/project/
+
+RUN pip install pip-tools
+RUN pip-compile --strip-extras requirements.in
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
