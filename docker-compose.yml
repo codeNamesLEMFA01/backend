@@ -1,18 +1,18 @@
 services:
-  web:
-    container_name: code-name-web
-    build: .
-    depends_on:
-      mongo:
-        condition: service_healthy
-    ports:
-      - "8000:8000"
-    networks:
-      - code-name
-    volumes:
-      - .:/home/project:ro
-    env_file:
-      - .env
+#  web:
+#    container_name: code-name-web
+#    build: .
+#    depends_on:
+#      mongo:
+#        condition: service_healthy
+#    ports:
+#      - "8000:8000"
+#    networks:
+#      - code-name
+#    volumes:
+#      - .:/home/project:ro
+#    env_file:
+#      - .env
 
   mongo:
     container_name: code-name-db
