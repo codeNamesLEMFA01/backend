@@ -9,6 +9,7 @@ from passlib.context import CryptContext
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from pydantic import BaseModel
+import os
 
 fake_users_db = {
     "johndoe": {
@@ -16,11 +17,12 @@ fake_users_db = {
         "full_name": "John Doe",
         "email": "johndoe@example.com",
         "hashed_password": "$2b$12$EixZaYVK1fsbw1ZfbX3OXePaWxn96p36WQoeG6Lruj3vjPGga31lW",
+        # password is "secret"
         "disabled": False,
     },
 }
 
-SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
@@ -28,10 +30,7 @@ router = APIRouter(
   prefix="/auth",
 )
 
-def fake_hash_password(password: str):
-    return "fakehashed" + password
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 class Token(BaseModel):
@@ -61,8 +60,6 @@ def get_user(db, username: str):
 
 
 def fake_decode_token(token):
-    # This doesn't provide any security at all
-    # Check the next version
     user = get_user(fake_users_db, token)
     return user
 
@@ -119,7 +116,7 @@ async def get_current_active_user(
     return current_user
 
 
-@router.post("/token")
+@router.post("/login")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
@@ -136,6 +133,23 @@ async def login_for_access_token(
     )
     return Token(access_token=access_token, token_type="bearer")
 
+@router.post("/register")
+async def register_user(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+):
+    if form_data.username in fake_users_db:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username already registered",
+        )
+    fake_users_db[form_data.username] = {
+        "username": form_data.username,
+        "full_name": form_data.username,
+        "email": form_data.username + "@example.com",
+        "hashed_password": get_password_hash(form_data.password),
+        "disabled": False,
+    }
+    return {"message": "User registered successfully"}
 
 @router.get("/users/me")
 async def read_users_me(
