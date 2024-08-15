@@ -5,3 +5,5 @@ python-dotenv==1.0.1
 pydantic[email]
 mongoengine==0.27.0
 fastapi-utilities
+PyJWT==2.9.0
+passlib[bcrypt]==1.7.4
