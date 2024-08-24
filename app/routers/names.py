@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request, HTTPException, Query
+# from fastapi.encoders import jsonable_encoder
 
 from ..dto.byYear import get_names_by_year
 from ..dto.byYear import get_sum_by_year_and_sex
@@ -6,6 +7,9 @@ from ..dto.byYear import get_total_by_sex
 
 from ..dto.trendsNames import trends_name, get_top_names_between_years
 from ..dto.trendsNames import get_name_diversity
+
+from ..dto.diversity import quantification_diversity, quantification_diversity_all_years, resultDiversity
+from ..dto.lengthNames import get_name_length_trends
 
 class NotFoundError(Exception):
     """Exception raised for errors in the input data that lead to not found results."""
@@ -47,12 +51,12 @@ def read_trends_name(request: Request, name: str):
   except NotFoundError as e:
     raise HTTPException(status_code=404) from e
 
-@router.get("/trends_name/diversity/")
-def read_trends_name(request: Request,):
-  try:
-    return get_name_diversity()
-  except NotFoundError as e:
-    raise HTTPException(status_code=404) from e
+# @router.get("/trends_name/diversity/")
+# def read_trends_name(request: Request,):
+#   try:
+#     return get_name_diversity()
+#   except NotFoundError as e:
+#     raise HTTPException(status_code=404) from e
 
 @router.get("/trends_name/top/")
 def read_trends_name(
@@ -65,5 +69,34 @@ def read_trends_name(
     if start_year > end_year:
       raise HTTPException(status_code=400, detail="l'année de début doit être inférieure ou égale à l'année de fin")
     return get_top_names_between_years(start_year, end_year, top_n)
+  except NotFoundError as e:
+    raise HTTPException(status_code=404) from e
+
+# @router.get("/trends_name/diversity/")
+# def read_trends_name(request: Request,):
+#   try:
+#     return quantification_diversity()
+#   except NotFoundError as e:
+#     raise HTTPException(status_code=404) from e
+
+# @router.get("/trends_name/diversity/all_years/")
+# def read_trends_name(request: Request,):
+#   try:
+#     return quantification_diversity_all_years()
+#   except NotFoundError as e:
+#     raise HTTPException(status_code=404) from e
+# @router.get("/trends_name/diversity/test/")
+# def read_trends_name(request: Request,):
+#   try:
+#     return resultDiversity
+#   except NotFoundError as e:
+#     raise HTTPException(status_code=404) from e
+@router.get("/trends_name/length_name/")
+def read_trends_name(request: Request,):
+  try:
+    # result = get_name_length_trends()
+    # resJson = jsonable_encoder(result, json_compatible_types=[dict])
+    # return resJson
+    return get_name_length_trends()
   except NotFoundError as e:
     raise HTTPException(status_code=404) from e
