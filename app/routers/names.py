@@ -5,6 +5,7 @@ from ..dto.byYear import get_total_by_sex
 from ..extract.namesList import get_names_list
 from ..dto.evolutionName import evolution_name
 
+from ..dto.trendsNames import get_top_names_between_years, get_diversity
 from ..dto.trendsNames import get_top_names_between_years
 from ..dto.lengthName import get_name_length
 
@@ -84,14 +85,21 @@ def read_total_birth_by_sex(
 #         raise HTTPException(status_code=404) from e
 #
 #
-# @router.get("/trends_name/diversity/")
-# def read_trends_name(
-#     request: Request,
-# ):
-#     try:
-#         return get_name_diversity()
-#     except NotFoundError as e:
-#         raise HTTPException(status_code=404) from e
+@router.get("/trends_name/diversity/")
+def read_trends_name(
+    request: Request,
+    start_year: int = Query(1880, description="The start year for the trend analysis"),
+    end_year: int = Query(1900, description="The end year for the trend analysis"),
+    sex: str = Query("", description="The sex for trends analysis"),
+):
+    try:
+        if start_year > end_year:
+            raise HTTPException(
+                status_code=400,
+            )
+        return get_diversity(start_year, end_year, sex)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404) from e
 
 
 @router.get("/trends_name/top/")
@@ -100,6 +108,24 @@ def read_trends_name(
     start_year: int = Query(1880, description="The start year for the trend analysis"),
     end_year: int = Query(1900, description="The end year for the trend analysis"),
     top_n: int = Query(10, description="The number of top names to return"),
+):
+    try:
+        if start_year > end_year:
+            raise HTTPException(
+                status_code=400,
+                detail="l'année de début doit être inférieure ou égale à l'année de fin",
+            )
+        return get_top_names_between_years(start_year, end_year, top_n)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404) from e
+
+
+@router.get("/trends_name/top/")
+def read_trends_name(
+        request: Request,
+        start_year: int = Query(1880, description="The start year for the trend analysis"),
+        end_year: int = Query(1900, description="The end year for the trend analysis"),
+        top_n: int = Query(10, description="The number of top names to return"),
 ):
     try:
         if start_year > end_year:

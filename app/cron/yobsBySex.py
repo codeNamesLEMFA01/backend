@@ -1,11 +1,12 @@
 from fastapi_utilities import repeat_at
 from fastapi import APIRouter
 from ..models.yob import Yob
+from ..utils.cron.yobsBySex import yobsBySexCron
 
 
 router = APIRouter()
 
-@repeat_at(cron="yobsBySexCron")
+@repeat_at(cron=yobsBySexCron)
 @router.on_event('startup')
 async def yobsBySex():
     pipeline = [

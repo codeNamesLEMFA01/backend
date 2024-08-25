@@ -254,11 +254,8 @@ from ..models.yob import Yob
 def get_top_names_between_years(start_year, end_year, top_n):
     # Récupérer les données de MongoDB
     yobs = Yob.objects(year__gte=start_year, year__lte=end_year)
-    print(yobs)
     # Convertir les données en DataFrame pandas
     names = pd.DataFrame(json.loads(yobs.to_json()))
-
-    print(names)
 
     def top_names_by_sex(sex):
         # Filtrer les données par sexe
@@ -308,3 +305,18 @@ def get_top_names_between_years(start_year, end_year, top_n):
     }
 
     return result
+
+
+def get_diversity(start_year, end_year, sex=None):
+    def simpson_index(series):
+        N = series.sum()
+        return 1 - ((series / N) ** 2).sum()
+
+    yobs = Yob.objects(year__gte=start_year, year__lte=end_year)
+    names = pd.DataFrame(json.loads(yobs.to_json()))
+    names["diversity"] = names.groupby("year").agg({"birth": [simpson_index]})
+    diversity_by_year_gender = names.groupby(["year", "sex"]).agg(
+        {"birth": [simpson_index]}
+    )
+
+    print(diversity_by_year_gender)
