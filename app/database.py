@@ -16,5 +16,5 @@ MONGO_URL = f"mongodb://{MONGO_ROOT_USER}:{MONGO_ROOT_PASSWORD}@{MONGO_HOST}:{MO
 
 # Établir la connexion à MongoDB avec MongoEngine
 def connect_to_mongo():
-    db = connect(host=MONGO_URL)
+    db = connect(host=MONGO_URL, alias="default")
     return db
