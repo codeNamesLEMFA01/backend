@@ -86,18 +86,17 @@ def read_total_birth_by_sex(
 #
 #
 @router.get("/trends_name/diversity/")
-def read_trends_name(
+def read_diversity(
     request: Request,
     start_year: int = Query(1880, description="The start year for the trend analysis"),
     end_year: int = Query(1900, description="The end year for the trend analysis"),
-    sex: str = Query("", description="The sex for trends analysis"),
 ):
     try:
         if start_year > end_year:
             raise HTTPException(
                 status_code=400,
             )
-        return get_diversity(start_year, end_year, sex)
+        return get_diversity(start_year, end_year)
     except NotFoundError as e:
         raise HTTPException(status_code=404) from e
 
