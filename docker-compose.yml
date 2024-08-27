@@ -1,12 +1,22 @@
 services:
   web:
     container_name: code-name-web
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       mongo:
         condition: service_healthy
     ports:
       - "8000:8000"
+    develop:
+      watch:
+        -   action: sync
+            path: .
+            target: /home/project:ro
+            ignore:
+              - ReadMe.md
+              - .venv/
     networks:
       - code-name
     volumes:

@@ -7,6 +7,9 @@ from .cron.seedDb import router as seed_router
 from .cron.yobsBySex import router as yopByYear
 from .cron.namesCron import router as namesCron
 from .cron.lengthNameCron import router as lengthNameCron
+from .database import connect_to_mongo
+import logging
+
 
 app = FastAPI()
 

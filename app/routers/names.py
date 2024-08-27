@@ -5,7 +5,8 @@ from ..dto.byYear import get_total_by_sex
 from ..extract.namesList import get_names_list
 from ..dto.evolutionName import evolution_name
 
-from ..dto.trendsNames import get_top_names_between_years, get_diversity
+from ..dto.trendsNames import get_top_names_between_years
+from ..dto.diversity import get_diversity
 from ..dto.trendsNames import get_top_names_between_years
 from ..dto.lengthName import get_name_length
 
@@ -27,7 +28,6 @@ router = APIRouter(
 
 @router.get("/{year}")
 def read_names_by_year(request: Request, year: int):
-    print(request)
     try:
         return get_names_by_year(year)
     except Exception as e:
@@ -121,10 +121,10 @@ def read_trends_name(
 
 @router.get("/trends_name/top/")
 def read_trends_name(
-        request: Request,
-        start_year: int = Query(1880, description="The start year for the trend analysis"),
-        end_year: int = Query(1900, description="The end year for the trend analysis"),
-        top_n: int = Query(10, description="The number of top names to return"),
+    request: Request,
+    start_year: int = Query(1880, description="The start year for the trend analysis"),
+    end_year: int = Query(1900, description="The end year for the trend analysis"),
+    top_n: int = Query(10, description="The number of top names to return"),
 ):
     try:
         if start_year > end_year:
