@@ -2,6 +2,8 @@ from fastapi import APIRouter, Request, HTTPException, Query
 from ..dto.byYear import get_names_by_year
 from ..dto.byYear import get_sum_by_year_and_sex
 from ..dto.byYear import get_total_by_sex
+from ..extract.namesList import get_names_list
+from ..dto.evolutionName import evolution_name
 
 from ..dto.trendsNames import get_top_names_between_years
 
@@ -41,6 +43,24 @@ def read_sum_by_year(request: Request, year: int):
 def read_total_birth_by_sex(request: Request):
     try:
         return get_total_by_sex()
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+@router.get("/evolution_name/{name}")
+def read_evolution_name(request: Request, name: str):
+    try:
+        return evolution_name(name)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+@router.get("/names_list/")
+def read_names_list(
+    request: Request,
+    limit: int = Query(100, description="Limit"),
+    offset: int = Query(0, description="Offset"),
+    name: str = Query(None, description="Name")):
+    try:
+        return get_names_list(limit, offset, name)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
