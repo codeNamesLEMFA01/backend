@@ -5,6 +5,7 @@ import uvicorn
 from .routers.names import router as names_router
 from .cron.seedDb import router as seed_router
 from .cron.yobsBySex import router as yopByYear
+from .cron.namesCron import router as namesCron
 from .database import connect_to_mongo
 import logging
 import argparse
@@ -42,6 +43,7 @@ async def startup_event():
 app.include_router(names_router)
 app.include_router(seed_router)
 app.include_router(yopByYear)
+app.include_router(namesCron)
 
 
 def main() -> None:
