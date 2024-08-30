@@ -26,3 +26,4 @@ def load():
             logging.error(f"Error inserting batch {i//batch_size + 1}: {str(e)}")
     end_time = time.time()
     logging.info(f"Data loading completed. {end_time - start_time:.2f}")
+    return True

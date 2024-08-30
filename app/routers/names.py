@@ -85,7 +85,7 @@ def read_total_birth_by_sex(
 #         raise HTTPException(status_code=404) from e
 #
 #
-@router.get("/trends_name/diversity/")
+@router.get("/diversity/")
 def read_diversity(
     request: Request,
     start_year: int = Query(1880, description="The start year for the trend analysis"),
