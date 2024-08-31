@@ -7,11 +7,6 @@ from .cron.seedDb import router as seed_router
 from .cron.yobsBySex import router as yopByYear
 from .cron.namesCron import router as namesCron
 from .cron.lengthNameCron import router as lengthNameCron
-from .database import connect_to_mongo
-import logging
-import argparse
-from mongoengine import connect
-
 
 app = FastAPI()
 
@@ -46,11 +41,3 @@ app.include_router(seed_router)
 app.include_router(yopByYear)
 app.include_router(namesCron)
 app.include_router(lengthNameCron)
-
-
-def main() -> None:
-    uvicorn.run("main:app", reload=True)
-
-
-if __name__ == "__main__":
-    main()
