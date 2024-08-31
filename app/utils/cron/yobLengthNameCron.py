@@ -1,0 +1,1 @@
+lengthNameCron = "30 14 * * *"

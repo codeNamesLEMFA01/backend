@@ -6,6 +6,7 @@ from ..extract.namesList import get_names_list
 from ..dto.evolutionName import evolution_name
 
 from ..dto.trendsNames import get_top_names_between_years
+from ..dto.lengthName import get_name_length
 
 # from ..dto.trendsNames import get_name_diversity, trends_name
 
@@ -107,5 +108,12 @@ def read_trends_name(
                 detail="l'année de début doit être inférieure ou égale à l'année de fin",
             )
         return get_top_names_between_years(start_year, end_year, top_n)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404) from e
+
+@router.get("/trends_name/length_name/")
+def read_trends_name(request: Request,):
+    try:
+        return get_name_length()
     except NotFoundError as e:
         raise HTTPException(status_code=404) from e
