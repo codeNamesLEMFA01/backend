@@ -121,9 +121,9 @@ def get_name_length():
                 "female": latest_doc.meta_data.max['female'].to_mongo().to_dict()
             },
             "evolution": {
-                "male": latest_doc.meta_data.evolution['male'].to_mongo().to_dict(),
-                "female": latest_doc.meta_data.evolution['female'].to_mongo().to_dict(),
-                "global": latest_doc.meta_data.evolution['global'].to_mongo().to_dict()
+                "male": latest_doc.meta_data.evolution.male,
+                "female": latest_doc.meta_data.evolution.female,
+                "global": latest_doc.meta_data.evolution.global_
             },
             "describe": {
                 "male": latest_doc.meta_data.describe['male'].to_mongo().to_dict(),

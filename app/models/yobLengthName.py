@@ -29,7 +29,7 @@ class MetaDescribe(EmbeddedDocument):
 
 class MetaSection(EmbeddedDocument):
     max = DictField(EmbeddedDocumentField(MetaMax), required=True)
-    evolution = DictField(EmbeddedDocumentField(MetaEvolution), required=True)
+    evolution = EmbeddedDocumentField(MetaEvolution, required=True)
     describe = DictField(EmbeddedDocumentField(MetaDescribe), required=True)
 
 class YobLengthName(Document):

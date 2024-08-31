@@ -58,23 +58,11 @@ async def lengthNameCron():
                     name_length=int(obj['meta']['max']['female']['name_length'])
                 )
             },
-            evolution={
-                "male": MetaEvolution(
-                    male=float(obj['meta']['evolution']['male']),
-                    female=float(obj['meta']['evolution']['female']),
-                    global_=float(obj['meta']['evolution']['global'])
+            evolution=MetaEvolution(
+                male=float(obj['meta']['evolution']['male']),
+                female=float(obj['meta']['evolution']['female']),
+                global_=float(obj['meta']['evolution']['global'])
                 ),
-                "female": MetaEvolution(
-                    male=float(obj['meta']['evolution']['male']),
-                    female=float(obj['meta']['evolution']['female']),
-                    global_=float(obj['meta']['evolution']['global'])
-                ),
-                "global": MetaEvolution(
-                    male=float(obj['meta']['evolution']['male']),
-                    female=float(obj['meta']['evolution']['female']),
-                    global_=float(obj['meta']['evolution']['global'])
-                ),
-            },
             describe={
                 "male": MetaDescribe(
                     count=float(obj['meta']['describe']['male']['count']),
