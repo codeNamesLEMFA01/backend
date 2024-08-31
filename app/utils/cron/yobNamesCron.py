@@ -1,1 +1,0 @@
-yobNamesCron = "30 14 * * *"

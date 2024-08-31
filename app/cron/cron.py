@@ -4,6 +4,7 @@ from fastapi_utilities import repeat_at
 from .diversity import diversity
 from .yobsBySex import yobsBySex
 from .seedDb import seedDb
+from .namesCron import namesList
 
 router = APIRouter()
 
@@ -22,4 +23,6 @@ def cron_startup() -> None:
     diversity()
     print("diversity completed")
 
+    namesList()
+    print("namesList completed")
     print("All startup tasks completed")
