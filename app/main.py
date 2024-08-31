@@ -1,9 +1,7 @@
-from typing import Union
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from .routers.names import router as names_router
 from .cron.cron import router as cron_router
-from .cron.lengthNameCron import router as lengthNameCron
 from .database import connect_to_mongo
 import logging
 

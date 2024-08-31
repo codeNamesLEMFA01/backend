@@ -5,6 +5,7 @@ from .diversity import diversity
 from .yobsBySex import yobsBySex
 from .seedDb import seedDb
 from .namesCron import namesList
+from .lengthNameCron import lengthNameCron
 
 router = APIRouter()
 
@@ -25,4 +26,7 @@ def cron_startup() -> None:
 
     namesList()
     print("namesList completed")
+
+    lengthNameCron()
+    print("lengthNameCron completed")
     print("All startup tasks completed")
