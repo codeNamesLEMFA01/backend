@@ -1,7 +1,6 @@
 # Tried from here : https://fastapi.tiangolo.com/tutorial/security/
 
 from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
-from ..auth.seedDb import fake_users_db
 
 from ..models.token import Token
 from ..models.users import User
@@ -21,7 +20,7 @@ router = APIRouter(
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ) -> Token:
-    user = authenticate_user(fake_users_db, form_data.username, form_data.password)
+    user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -30,7 +29,7 @@ async def login_for_access_token(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user.username}, expires_delta=access_token_expires
+        data={"sub": user["username"]}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
 
@@ -38,22 +37,18 @@ async def login_for_access_token(
 async def register_user(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
 ):
-    if form_data.username in fake_users_db:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Username already registered",
-        )
-    fake_users_db[form_data.username] = {
-        "username": form_data.username,
-        "full_name": form_data.username,
-        "email": form_data.username + "@example.com",
-        "hashed_password": get_password_hash(form_data.password),
-        "disabled": False,
-    }
+    user_data = User(
+    username= form_data.username,
+    full_name= form_data.username,
+    email= f"{form_data.username}@example.com",
+    hashed_password= get_password_hash(form_data.password),
+    disabled= False
+    )
+    User.objects.insert(user_data)
     return {"message": "User registered successfully"}
 
-@router.get("/users/me")
-async def read_users_me(
-    current_user: Annotated[User, Depends(get_current_active_user)],
-):
-    return current_user
+# @router.get("/users/me")
+# async def read_users_me(
+#     current_user: Annotated[User, Depends(get_current_active_user)],
+# ):
+#     return current_user
