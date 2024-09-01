@@ -252,23 +252,15 @@ from ..models.yob import Yob
 
 
 def get_top_names_between_years(start_year, end_year, top_n):
-    # Récupérer les données de MongoDB
     yobs = Yob.objects(year__gte=start_year, year__lte=end_year)
-    print(yobs)
-    # Convertir les données en DataFrame pandas
     names = pd.DataFrame(json.loads(yobs.to_json()))
 
-    print(names)
-
     def top_names_by_sex(sex):
-        # Filtrer les données par sexe
         filtered_df = names[names["sex"] == sex]
 
-        # Grouper par prénom et sommer les naissances pour obtenir le top_n
         name_counts = filtered_df.groupby("name")["birth"].sum()
         top_names = name_counts.nlargest(top_n).index.tolist()
 
-        # Préparer les données pour chaque prénom
         data = []
         for name in top_names:
             name_data = filtered_df[filtered_df["name"] == name]
@@ -285,7 +277,6 @@ def get_top_names_between_years(start_year, end_year, top_n):
                 }
             )
 
-        # Obtenir le prénom le plus courant
         top_name = name_counts.nlargest(1).index[0]
         top_name_total = name_counts.nlargest(1).values[0]
 

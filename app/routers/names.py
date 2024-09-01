@@ -4,11 +4,9 @@ from ..dto.byYear import get_sum_by_year_and_sex
 from ..dto.byYear import get_total_by_sex
 from ..extract.namesList import get_names_list
 from ..dto.evolutionName import evolution_name
-
+from ..dto.diversity import get_diversity
 from ..dto.trendsNames import get_top_names_between_years
 from ..dto.lengthName import get_name_length
-
-# from ..dto.trendsNames import get_name_diversity, trends_name
 
 
 class NotFoundError(Exception):
@@ -26,7 +24,6 @@ router = APIRouter(
 
 @router.get("/{year}")
 def read_names_by_year(request: Request, year: int):
-    print(request)
     try:
         return get_names_by_year(year)
     except Exception as e:
@@ -47,6 +44,7 @@ def read_total_birth_by_sex(request: Request):
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.get("/evolution_name/{name}")
 def read_evolution_name(request: Request, name: str):
     try:
@@ -54,44 +52,34 @@ def read_evolution_name(request: Request, name: str):
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.get("/names_list/")
 def read_names_list(
     request: Request,
     limit: int = Query(100, description="Limit"),
     offset: int = Query(0, description="Offset"),
-    name: str = Query(None, description="Name")):
-    try:
-        return get_names_list(limit, offset, name)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
-
-
-@router.get("/total_by_sex/")
-def read_total_birth_by_sex(
-    request: Request,
+    name: str = Query(None, description="Name"),
 ):
     try:
-        return get_total_by_sex()
+        return get_names_list(limit, offset, name)
     except NotFoundError as e:
         raise HTTPException(status_code=404) from e
 
 
-# @router.get("/trends_name/{name}")
-# def read_trends_name(request: Request, name: str):
-#     try:
-#         return trends_name(name)
-#     except NotFoundError as e:
-#         raise HTTPException(status_code=404) from e
-#
-#
-# @router.get("/trends_name/diversity/")
-# def read_trends_name(
-#     request: Request,
-# ):
-#     try:
-#         return get_name_diversity()
-#     except NotFoundError as e:
-#         raise HTTPException(status_code=404) from e
+@router.get("/diversity/")
+def read_diversity(
+    request: Request,
+    start_year: int = Query(1880, description="The start year for the trend analysis"),
+    end_year: int = Query(1900, description="The end year for the trend analysis"),
+):
+    try:
+        if start_year > end_year:
+            raise HTTPException(
+                status_code=400,
+            )
+        return get_diversity(start_year, end_year)
+    except NotFoundError as e:
+        raise HTTPException(status_code=404) from e
 
 
 @router.get("/trends_name/top/")
@@ -111,8 +99,11 @@ def read_trends_name(
     except NotFoundError as e:
         raise HTTPException(status_code=404) from e
 
+
 @router.get("/trends_name/length_name/")
-def read_trends_name(request: Request,):
+def read_lenght_name(
+    request: Request,
+):
     try:
         return get_name_length()
     except NotFoundError as e:

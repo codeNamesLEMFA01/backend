@@ -1,12 +1,10 @@
-from typing import Union
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 from .routers.names import router as names_router
-from .cron.seedDb import router as seed_router
-from .cron.yobsBySex import router as yopByYear
-from .cron.namesCron import router as namesCron
-from .cron.lengthNameCron import router as lengthNameCron
+from .cron.cron import router as cron_router
+from .database import connect_to_mongo
+import logging
+
 
 app = FastAPI()
 
@@ -37,7 +35,4 @@ async def startup_event():
 
 # Inclure le routeur
 app.include_router(names_router)
-app.include_router(seed_router)
-app.include_router(yopByYear)
-app.include_router(namesCron)
-app.include_router(lengthNameCron)
+app.include_router(cron_router)

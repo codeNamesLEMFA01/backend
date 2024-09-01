@@ -1,12 +1,4 @@
 from zipfile import ZipFile
-import csv
-import time
-from ..models.yob import Yob
-
-zip_path = "./data/names.zip"
-
-
-from zipfile import ZipFile
 import pandas as pd
 
 zip_path = "./data/names.zip"

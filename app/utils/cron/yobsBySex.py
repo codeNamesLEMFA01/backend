@@ -1,1 +1,0 @@
-yobsBySexCron = "30 14 * * *"
