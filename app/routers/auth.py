@@ -1,20 +1,21 @@
 # Tried from here : https://fastapi.tiangolo.com/tutorial/security/
 
-from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
+from ..auth.authServices import authenticate_user, create_access_token, get_password_hash
 
 from ..models.token import Token
 from ..models.users import User
 
+import os
 from typing import Annotated
 from datetime import timedelta
 from fastapi import Depends, HTTPException, status, APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
-
 router = APIRouter(
   prefix="/auth",
 )
+
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
 @router.post("/login")
 async def login_for_access_token(

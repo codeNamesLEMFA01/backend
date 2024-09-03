@@ -1,8 +1,6 @@
-from mongoengine.context_managers import switch_db
-import logging
 from ..models.users import User
 
-def seed_users_db():
+def seedUsers():
     seed_users_db = [
         {
             "username": "johndoe",
@@ -30,14 +28,10 @@ def seed_users_db():
         },
     ]
 
-    batch_size = 3
-    total_items = len(seed_users_db)
-
-    for i in range(0, total_items, batch_size):
-        batch = seed_users_db[i : i + batch_size]
-        users_instances = [User(**item) for item in batch]
-        try:
-            with switch_db(User, "default"):
-                User.objects.insert(users_instances, load_bulk=False)
-        except Exception as e:
-            logging.error(f"Error inserting users to db: {str(e)}")
+    for user in seed_users_db:
+        try :
+            if not User.objects(email=user['email']):
+                User.objects.create(**user)
+                return "User seeded"
+        except:
+            print("Error inserting users to db")

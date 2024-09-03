@@ -3,7 +3,6 @@ from ..models.users import User
 
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
-from .seedDb import seed_users_db
 from mongoengine import DoesNotExist
 
 import jwt
