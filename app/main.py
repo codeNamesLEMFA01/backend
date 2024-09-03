@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from .routers.names import router as names_router
+from .routers.details import router as details_router
 from .cron.cron import router as cron_router
 from .database import connect_to_mongo
 import logging
@@ -35,4 +36,5 @@ async def startup_event():
 
 # Inclure le routeur
 app.include_router(names_router)
+app.include_router(details_router)
 app.include_router(cron_router)
