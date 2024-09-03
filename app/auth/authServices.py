@@ -56,22 +56,22 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        email: str = payload.get("sub")
+        if email is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(email=email)
         print(token_data)
     except InvalidTokenError:
         raise credentials_exception
-    user = get_user(email=User.objects.filter(username=username).to_dict()["email"])
+    user = get_user(email = token_data.email)
     if user is None:
         raise credentials_exception
     return user
 
 
-# async def get_current_active_user(
-#     current_user: Annotated[User, Depends(get_current_user)],
-# ):
-#     if current_user["disabled"]:
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user
+async def get_current_active_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    if current_user["disabled"]:
+        raise HTTPException(status_code=400, detail="Inactive user")
+    return current_user

@@ -1,6 +1,6 @@
 # Tried from here : https://fastapi.tiangolo.com/tutorial/security/
 
-from ..auth.authServices import authenticate_user, create_access_token, get_password_hash
+from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
 
 from ..models.token import Token
 from ..models.users import User
@@ -8,7 +8,7 @@ from ..models.users import User
 import os
 from typing import Annotated
 from datetime import timedelta
-from fastapi import Depends, HTTPException, status, APIRouter, Depends
+from fastapi import Depends, HTTPException, status, APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(
@@ -30,7 +30,7 @@ async def login_for_access_token(
         )
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={"sub": user["username"]}, expires_delta=access_token_expires
+        data={"sub": user["email"]}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
 
@@ -48,8 +48,8 @@ async def register_user(
     User.objects.insert(user_data)
     return {"message": "User registered successfully"}
 
-# @router.get("/users/me")
-# async def read_users_me(
-#     current_user: Annotated[User, Depends(get_current_active_user)],
-# ):
-#     return current_user
+@router.get("/users/me")
+async def read_users_me(
+    current_user: Annotated[User, Depends(get_current_active_user)],
+):
+    return current_user
