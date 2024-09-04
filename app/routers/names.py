@@ -28,7 +28,7 @@ router = APIRouter(
 
 
 @router.get("/{year}")
-def read_names_by_year(request: Request, year: int):
+def read_names_by_year(request: Request, year: int, current_user: Annotated[User, Depends(get_current_active_user)],):
     try:
         return get_names_by_year(year)
     except Exception as e:
@@ -36,14 +36,14 @@ def read_names_by_year(request: Request, year: int):
 
 
 @router.get("/sum_by_year/{year}")
-def read_sum_by_year(request: Request, year: int):
+def read_sum_by_year(request: Request, year: int, current_user: Annotated[User, Depends(get_current_active_user)],):
     try:
         return get_sum_by_year_and_sex(year)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-def read_total_birth_by_sex(request: Request):
+def read_total_birth_by_sex(request: Request, current_user: Annotated[User, Depends(get_current_active_user)],):
     try:
         return get_total_by_sex()
     except Exception as e:
@@ -51,7 +51,7 @@ def read_total_birth_by_sex(request: Request):
 
 
 @router.get("/evolution_name/{name}")
-def read_evolution_name(request: Request, name: str):
+def read_evolution_name(request: Request, name: str, current_user: Annotated[User, Depends(get_current_active_user)],):
     try:
         return evolution_name(name)
     except Exception as e:
@@ -61,6 +61,7 @@ def read_evolution_name(request: Request, name: str):
 @router.get("/names_list/")
 def read_names_list(
     request: Request,
+    current_user: Annotated[User, Depends(get_current_active_user)],
     limit: int = Query(100, description="Limit"),
     offset: int = Query(0, description="Offset"),
     name: str = Query(None, description="Name"),
@@ -74,6 +75,7 @@ def read_names_list(
 @router.get("/diversity/")
 def read_diversity(
     request: Request,
+    current_user: Annotated[User, Depends(get_current_active_user)],
     start_year: int = Query(1880, description="The start year for the trend analysis"),
     end_year: int = Query(1900, description="The end year for the trend analysis"),
 ):
@@ -90,6 +92,7 @@ def read_diversity(
 @router.get("/trends_name/top/")
 def read_trends_name(
     request: Request,
+    current_user: Annotated[User, Depends(get_current_active_user)],
     start_year: int = Query(1880, description="The start year for the trend analysis"),
     end_year: int = Query(1900, description="The end year for the trend analysis"),
     top_n: int = Query(10, description="The number of top names to return"),
