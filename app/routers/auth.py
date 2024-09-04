@@ -1,5 +1,3 @@
-# Tried from here : https://fastapi.tiangolo.com/tutorial/security/
-
 from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
 
 from ..models.token import Token
@@ -13,7 +11,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter(
   prefix="/auth",
-)
+)   
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 
@@ -36,12 +34,10 @@ async def login_for_access_token(
 
 @router.post("/register")
 async def register_user(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
 ):
     user_data = User(
-    username= form_data.username,
-    full_name= form_data.username,
-    email= f"{form_data.username}@example.com",
+    email= form_data.username,
     hashed_password= get_password_hash(form_data.password),
     disabled= False
     )
