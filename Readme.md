@@ -45,6 +45,8 @@ Les variables d'environnement sont utilisées pour la configuration et doivent �
 | `MONGO_HOST` | Hôte de la base de données MongoDB |
 | `MONGO_PORT` | Port de la base de données MongoDB |
 | `SEEDER` | Active ou désactive l'insertion des données dans la base de données au lancement du serveur |
+| `SECRET_KEY` | Clé d'encodage pour créer les JWT |
+| `ACCESS_TOKEN_EXPIRE_MINUTES` | Delta de temps de validité pour le JWT actuel |
 ## Utilisation
 
 1. Créez un fichier `.env` avec les variables d'environnement requises.
