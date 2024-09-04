@@ -4,6 +4,7 @@ from fastapi_utilities import repeat_at
 from .diversity import diversity
 from .yobsBySex import yobsBySex
 from .seedDb import seedDb
+from ..auth.seedUsers import seedUsers
 from .namesCron import namesList
 from .lengthNameCron import lengthNameCron
 import os
@@ -26,6 +27,9 @@ def cron_exec():
 
 def exec_order():
     print("Starting cron tasks")
+
+    seedUsers()
+    print("seedUsers completed")
 
     seedDb()
     print("seedDb completed")

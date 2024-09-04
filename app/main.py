@@ -5,6 +5,7 @@ from .routers.details import router as details_router
 from .cron.cron import router as cron_router
 from .database import connect_to_mongo
 import logging
+from .routers.auth import router as auth_router
 
 
 app = FastAPI()
@@ -38,3 +39,4 @@ async def startup_event():
 app.include_router(names_router)
 app.include_router(details_router)
 app.include_router(cron_router)
+app.include_router(auth_router)

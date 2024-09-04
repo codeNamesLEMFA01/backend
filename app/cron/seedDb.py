@@ -1,4 +1,5 @@
 from ..etl.load import load
+import os
 
 
 def seedDb():
