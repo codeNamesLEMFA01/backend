@@ -1,6 +1,5 @@
 from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
 
-from ..models.token import Token
 from ..models.users import User
 
 import os
@@ -18,7 +17,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 @router.post("/login")
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-) -> Token:
+):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -30,7 +29,8 @@ async def login_for_access_token(
     access_token = create_access_token(
         data={"sub": user["email"]}, expires_delta=access_token_expires
     )
-    return Token(access_token=access_token, token_type="bearer")
+    
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/register")
 async def register_user(
