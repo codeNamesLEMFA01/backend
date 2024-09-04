@@ -60,7 +60,6 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         if email is None:
             raise credentials_exception
         token_data = TokenData(email=email)
-        print(token_data)
     except InvalidTokenError:
         raise credentials_exception
     user = get_user(email = token_data.email)
