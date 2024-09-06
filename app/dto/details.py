@@ -12,7 +12,7 @@ def get_details():
                 {"$limit": 1},
             ]
         )
-        .next()["_id"]
+        .next()
     )
 
     top_male = (
@@ -24,11 +24,11 @@ def get_details():
                 {"$limit": 1},
             ]
         )
-        .next()["_id"]
+        .next()
     )
 
     return {
-        "top_female_name": top_female,
-        "top_male_name": top_male,
+        "top_female_name": {"name": top_female["_id"], "total_births": top_female["total_births"]},
+        "top_male_name": {"name": top_male["_id"], "total_births": top_male["total_births"]},
         "total_births": total_births,
     }

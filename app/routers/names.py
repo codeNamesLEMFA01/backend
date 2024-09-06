@@ -7,6 +7,7 @@ from ..dto.evolutionName import evolution_name
 from ..dto.diversity import get_diversity
 from ..dto.trendsNames import get_top_names_between_years
 from ..dto.lengthName import get_name_length
+from ..dto.details import get_details
 
 from ..auth.authServices import get_current_active_user
 from fastapi import Depends
@@ -42,7 +43,7 @@ def read_sum_by_year(request: Request, year: int, current_user: Annotated[User, 
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
-
+@router.get("/total_by_sex/")
 def read_total_birth_by_sex(request: Request, current_user: Annotated[User, Depends(get_current_active_user)],):
     try:
         return get_total_by_sex()
