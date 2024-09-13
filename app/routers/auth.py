@@ -8,15 +8,13 @@ from datetime import timedelta
 from fastapi import Depends, HTTPException, status, APIRouter, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from mongoengine.errors import NotUniqueError
+from ..utils.cookies import setCookie
 
 router = APIRouter(
   prefix="/auth",
 )
 
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
-
-def setCookie(response, value):
-    response.set_cookie(key="code_names_access_token", value=value, secure=True, samesite="None", max_age=ACCESS_TOKEN_EXPIRE_MINUTES)
 
 @router.post("/login")
 async def login_for_access_token(
