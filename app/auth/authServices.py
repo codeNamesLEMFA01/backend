@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Annotated
 from mongoengine import DoesNotExist
 
+import os
 import jwt
 from jwt.exceptions import InvalidTokenError
 from passlib.context import CryptContext
@@ -16,6 +17,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 ALGORITHM = "HS256"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
+
+def setCookie(response, value):
+    response.set_cookie(key="code_names_access_token", value=value, secure=True, samesite="None", max_age=ACCESS_TOKEN_EXPIRE_MINUTES)
 
 def get_user(email: str):
     try:

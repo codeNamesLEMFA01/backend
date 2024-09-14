@@ -1,4 +1,4 @@
-from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user
+from ..auth.authServices import authenticate_user, create_access_token, get_password_hash, get_current_active_user, setCookie
 
 from ..models.users import User
 
@@ -8,7 +8,6 @@ from datetime import timedelta
 from fastapi import Depends, HTTPException, status, APIRouter, Response
 from fastapi.security import OAuth2PasswordRequestForm
 from mongoengine.errors import NotUniqueError
-from ..utils.cookies import setCookie
 
 router = APIRouter(
   prefix="/auth",
